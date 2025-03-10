@@ -1,41 +1,36 @@
 package com.example.faq_backend_api.service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.example.faq_backend_api.api.interfaces.FAQRepository;
 import com.example.faq_backend_api.api.model.FAQ;
 
 @Service
 public class FAQService {
 
-    private List<FAQ> faqList;
+    private final FAQRepository faqRepository;
 
 
-    public FAQService() {
-        faqList = new ArrayList<>();
-        FAQ faq1  = new FAQ(1, "How much money do i earn per hour?", "you will earn 13 boxes per hour", "https://youtube.com");
-        FAQ faq2  = new FAQ(2, "How much money do i earn per hour?", "you will earn 13 boxes per hour", "https://youtube.com");
-        FAQ faq3  = new FAQ(3, "How much money do i earn per hour?", "you will earn 13 boxes per hour", "https://youtube.com");
-
-        faqList.addAll(Arrays.asList(faq1, faq2,  faq3));
-    }
-
-    public Optional<FAQ> getFAQ(int id) {
-        for (FAQ faq : faqList) {
-            if (id == faq.getId()) {
-                return Optional.of(faq);
-            }
-        }
-        return Optional.empty();
+    public FAQService(FAQRepository faqRepository) {
+        this.faqRepository = faqRepository;
     }
 
     public FAQ addFAQ(FAQ faq) {
-        faqList.add(faq);
-        return faq;
+        if (this.questionIsEmpty(faq)) {
+            throw new IllegalArgumentException("question and answer are required fields!");
+        }
+        return faqRepository.save(faq);
+    }
+
+    public Optional<FAQ> getFAQ(Long id) {
+        return faqRepository.findById(id);
+    }
+
+
+    Boolean questionIsEmpty(FAQ faq){
+        return faq.getQuestion() == "" || faq.getAnswer() == "";
     }
     
     
