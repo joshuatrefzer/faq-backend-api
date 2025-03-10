@@ -3,19 +3,27 @@ package com.example.faq_backend_api.api.model;
 
 public class FAQ {
 
-//#region id
     private int id;
+    private String question;
+    private String solution;
+    private String videoLink;
+
+    public FAQ(int id, String question, String solution, String videoLink) {
+        this.id = id;
+        this.question = question;
+        this.solution = solution;
+        this.videoLink = videoLink;
+    }
+
+
+//#region getter & setter
     public int getId() {
         return id;
     }
     public void setId(int id) {
         this.id = id;
     }
-//#endregion
 
-
-//#region question
-    private String question;
     public String getQuestion() {
         return question;
     }
@@ -23,12 +31,6 @@ public class FAQ {
         this.question = question;
     }
 
-//#endregion
-
-//#region solution
-
-
-    private String solution;
     public String getSolution() {
         return solution;
     }
@@ -36,11 +38,6 @@ public class FAQ {
         this.solution = solution;
     }
 
-//#endregion
-
-//#region videoLink
-
-    private String videoLink;
     public String getVideoLink() {
         return videoLink;
     }
@@ -49,20 +46,6 @@ public class FAQ {
     }
 
 //#endregion
-
-
-
-
-
-
-    
-
-
-    
-    
-
-
-
 
     
 }

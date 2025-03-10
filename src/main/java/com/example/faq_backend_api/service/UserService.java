@@ -25,7 +25,6 @@ public class UserService {
         userList.addAll(Arrays.asList(user1, user2, user3, user4, user5));
     }
     
-
     @SuppressWarnings("unchecked")
     public Optional<User> getUser(Integer id){
         @SuppressWarnings("rawtypes")
