@@ -26,5 +26,4 @@ public class UserController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
     
-
 }
