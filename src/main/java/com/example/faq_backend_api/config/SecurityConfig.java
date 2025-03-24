@@ -2,26 +2,36 @@
 package com.example.faq_backend_api.config;
 
 import org.springframework.context.annotation.*;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.*;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import static org.springframework.security.config.Customizer.withDefaults;
+import com.example.faq_backend_api.api.security.JwtAuthenticationFilter;
+import com.example.faq_backend_api.service.JwtService;
+
 
 @Configuration
 public class SecurityConfig {
 
+    private final JwtService jwtService;
+
+    public SecurityConfig(JwtService jwtService) {
+        this.jwtService = jwtService;
+    }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable())  
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/signup", "/auth/login", "/faq").permitAll() 
+                        .requestMatchers("/auth/signup", "/auth/login" , "/faq").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/faq/**").authenticated() 
                         .anyRequest().authenticated()) 
-                .httpBasic(withDefaults()); 
-
+                .addFilterBefore(new JwtAuthenticationFilter(jwtService), UsernamePasswordAuthenticationFilter.class);                                                                                                            
         return http.build();
     }
 
