@@ -39,7 +39,7 @@ public class FAQService {
     }
 
     public FAQ addFAQ(FAQ faq) {
-        if (this.questionIsEmpty(faq)) {
+        if (this.faqQuestionIsEmpty(faq)) {
             throw new IllegalArgumentException("question and answer are required fields!");
         }
         return faqRepository.save(faq);
@@ -70,7 +70,7 @@ public class FAQService {
         });
     }
 
-    private Boolean questionIsEmpty(FAQ faq) {
+    private Boolean faqQuestionIsEmpty(FAQ faq) {
         return faq.getQuestion() == null || faq.getAnswer() == null ||
                faq.getQuestion().isEmpty() || faq.getAnswer().isEmpty();
     }
