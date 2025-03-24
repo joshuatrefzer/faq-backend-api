@@ -28,8 +28,9 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/signup", "/auth/login" , "/faq").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/faq/**").authenticated() 
+                        .requestMatchers(HttpMethod.POST, "/faq").authenticated() 
+                        .requestMatchers("/auth/signup", "/auth/login").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/faq").permitAll()
                         .anyRequest().authenticated()) 
                 .addFilterBefore(new JwtAuthenticationFilter(jwtService), UsernamePasswordAuthenticationFilter.class);                                                                                                            
         return http.build();

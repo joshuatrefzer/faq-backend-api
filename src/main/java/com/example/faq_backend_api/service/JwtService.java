@@ -4,13 +4,13 @@ import java.security.Key;
 import java.util.Date;
 
 import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
 
 import org.springframework.stereotype.Service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 
 @Service
 public class JwtService {
@@ -30,17 +30,17 @@ public class JwtService {
 
     public String generateToken(String username) {
         return Jwts.builder()
-                .setSubject(username)
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)) 
-                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+                .subject(username)
+                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)) 
+                .signWith(SECRET_KEY)
                 .compact();
     }
 
     public Claims extractClaims(String token) {
         JwtParser parser = Jwts.parser() 
-                .setSigningKey(SECRET_KEY)        
+                .verifyWith((SecretKey) SECRET_KEY)        
                 .build(); 
-        return parser.parseClaimsJws(token).getBody();
+        return parser.parseSignedClaims(token).getPayload();
     }
 
     public String extractUsername(String token) {
