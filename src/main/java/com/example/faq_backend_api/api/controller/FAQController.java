@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.faq_backend_api.api.model.FAQ;
 import com.example.faq_backend_api.service.FAQService;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
 
 @RestController
 @RequestMapping("/faq")
@@ -25,7 +25,7 @@ public class FAQController {
     public FAQController(FAQService faqService) {
         this.faqService = faqService;
     }
-    
+
     @GetMapping("/{id}")
     public ResponseEntity<FAQ> getFAQ(@PathVariable Long id) {
         return faqService.getFAQ(id)
@@ -36,8 +36,8 @@ public class FAQController {
     @GetMapping
     public ResponseEntity<List<FAQ>> getAllFaqs() {
         List<FAQ> faqs = faqService.getAllFAQs();
-        return faqs.isEmpty() 
-                ? ResponseEntity.noContent().build() 
+        return faqs.isEmpty()
+                ? ResponseEntity.noContent().build()
                 : ResponseEntity.ok(faqs);
     }
 
@@ -55,13 +55,16 @@ public class FAQController {
     @GetMapping("/search")
     public ResponseEntity<List<FAQ>> searchFAQs(@RequestParam String query) {
         List<FAQ> foundFaqs = faqService.searchFAQs(query);
-        return foundFaqs.isEmpty() 
-                ? ResponseEntity.noContent().build() 
+        return foundFaqs.isEmpty()
+                ? ResponseEntity.noContent().build()
                 : ResponseEntity.ok(foundFaqs);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<FAQ> updateFAQ(@PathVariable Long id, @RequestBody FAQ updatedFAQ) {
+        return faqService.updateFAQ(id, updatedFAQ)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
 }
-
-
-
-

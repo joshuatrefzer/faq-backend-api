@@ -61,8 +61,16 @@ public class FAQService {
                 .collect(Collectors.toList());
     }
 
+    public Optional<FAQ> updateFAQ(Long id, FAQ updatedFAQ) {
+        return faqRepository.findById(id).map(existingFAQ -> {
+            existingFAQ.setQuestion(updatedFAQ.getQuestion());
+            existingFAQ.setAnswer(updatedFAQ.getAnswer());
+            existingFAQ.setTags(updatedFAQ.getTags());
+            return faqRepository.save(existingFAQ);
+        });
+    }
 
-    Boolean questionIsEmpty(FAQ faq) {
+    private Boolean questionIsEmpty(FAQ faq) {
         return faq.getQuestion() == null || faq.getAnswer() == null ||
                faq.getQuestion().isEmpty() || faq.getAnswer().isEmpty();
     }
