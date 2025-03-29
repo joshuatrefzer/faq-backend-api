@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   backend:
-    image: your-dockerhub-user/faq-backend:latest
+    build: .  
     container_name: faq-backend
     ports:
       - "8080:8080"
@@ -17,10 +17,10 @@ services:
     restart: always
     env_file:
       - .env
+    ports:
+      - "5433:5432"  
     volumes:
       - pgdata:/var/lib/postgresql/data
-    ports:
-      - "5433:5432" 
 
 volumes:
   pgdata:
