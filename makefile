@@ -22,12 +22,33 @@ rebuild-backend:
 	docker compose up --build --force-recreate backend
 
 
-#production commands
-prod-up:
-	docker-compose -f docker-compose.prod.yml up --build -d
 
+
+
+#FOR PRODUCTION using "docker-compose" not "docker compose" 
+
+# DB- Data persists
+prod-up:
+	docker-compose up --build --force-recreate -d
+
+# Stop containers, but keep volumes 
 prod-down:
-	docker-compose -f docker-compose.prod.yml down --remove-orphans
+	docker-compose down --remove-orphans
+
+# Stops everything and deletes volumes
+prod-reset-db:
+	docker-compose down --volumes --remove-orphans
+
+# complete rebuild without loosing data
+rebuild-prod:
+	mvn clean install -DskipTests && \
+	docker-compose down --remove-orphans && \
+	docker-compose up --build --force-recreate -d
+
+# rebuild backend container
+prod-rebuild-backend:
+	mvn clean install -DskipTests && \
+	docker-compose up --build --force-recreate backend
 
 
 # deletes everything, starts with empty DB
