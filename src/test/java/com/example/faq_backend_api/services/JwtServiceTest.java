@@ -19,7 +19,6 @@ import com.example.faq_backend_api.service.JwtService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.security.SignatureException;
 
 public class JwtServiceTest {
     private JwtService jwtService;
@@ -28,8 +27,7 @@ public class JwtServiceTest {
     @BeforeEach
     void setUp() throws Exception {
         jwtService = new JwtService();
-        
-     
+
         mockSecretKey = Jwts.SIG.HS256.key().build();
 
         Field secretKeyField = JwtService.class.getDeclaredField("SECRET_KEY");
@@ -83,21 +81,24 @@ public class JwtServiceTest {
 
     @Test
     void testTokenIsExpired() {
-        // Token mit kurzer Lebensdauer (1ms), damit es sofort abläuft
         String expiredToken = Jwts.builder()
                 .subject("expiredUser")
-                .expiration(new Date(System.currentTimeMillis() - 1000)) // in der Vergangenheit
+                .expiration(new Date(System.currentTimeMillis() - 1000)) // Bereits abgelaufen
                 .signWith(mockSecretKey)
                 .compact();
 
-        assertTrue(jwtService.isTokenExpired(expiredToken));
+        assertThrows(io.jsonwebtoken.ExpiredJwtException.class, () -> {
+            jwtService.isTokenExpired(expiredToken);
+        });
     }
 
     @Test
     void testInvalidTokenThrowsException() {
-        String invalidToken = "invalid.token.here";
+        String validToken = jwtService.generateToken("testuser");
 
-        Exception exception = assertThrows(SignatureException.class, () -> {
+        String invalidToken = validToken.substring(0, validToken.lastIndexOf('.') + 1) + "invalidsignature";
+
+        Exception exception = assertThrows(io.jsonwebtoken.security.SignatureException.class, () -> {
             jwtService.extractClaims(invalidToken);
         });
 
@@ -108,7 +109,7 @@ public class JwtServiceTest {
     void testExpiredTokenThrowsException() {
         String expiredToken = Jwts.builder()
                 .subject("expiredUser")
-                .expiration(new Date(System.currentTimeMillis() - 1000)) // Sofort abgelaufen
+                .expiration(new Date(System.currentTimeMillis() - 1000))
                 .signWith(mockSecretKey)
                 .compact();
 
@@ -116,5 +117,5 @@ public class JwtServiceTest {
             jwtService.extractClaims(expiredToken);
         });
     }
-    
+
 }
