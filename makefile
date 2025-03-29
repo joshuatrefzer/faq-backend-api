@@ -24,10 +24,10 @@ rebuild-backend:
 
 #production commands
 prod-up:
-	docker compose -f docker-compose.prod.yml up --build -d
+	docker-compose -f docker-compose.prod.yml up --build -d
 
 prod-down:
-	docker compose -f docker-compose.prod.yml down --remove-orphans
+	docker-compose -f docker-compose.prod.yml down --remove-orphans
 
 
 # deletes everything, starts with empty DB
