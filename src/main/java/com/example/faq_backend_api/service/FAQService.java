@@ -39,10 +39,15 @@ public class FAQService {
     }
 
     public FAQ addFAQ(FAQ faq) {
-        if (this.faqQuestionIsEmpty(faq)) {
+        if (this.faqQuestionOrAnswerIsEmpty(faq)) {
             throw new IllegalArgumentException("question and answer are required fields!");
         }
         return faqRepository.save(faq);
+    }
+
+    private Boolean faqQuestionOrAnswerIsEmpty(FAQ faq) {
+        return faq.getQuestion() == null || faq.getAnswer() == null ||
+               faq.getQuestion().isEmpty() || faq.getAnswer().isEmpty();
     }
 
     public Optional<FAQ> getFAQ(Long id) {
@@ -70,10 +75,7 @@ public class FAQService {
         });
     }
 
-    private Boolean faqQuestionIsEmpty(FAQ faq) {
-        return faq.getQuestion() == null || faq.getAnswer() == null ||
-               faq.getQuestion().isEmpty() || faq.getAnswer().isEmpty();
-    }
+    
     
     
 }

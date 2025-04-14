@@ -9,18 +9,29 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.*;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.example.faq_backend_api.api.security.JwtAuthenticationFilter;
 import com.example.faq_backend_api.service.JwtService;
 
 
 @Configuration
-public class SecurityConfig {
+public class SecurityConfig implements WebMvcConfigurer {
 
     private final JwtService jwtService;
 
     public SecurityConfig(JwtService jwtService) {
         this.jwtService = jwtService;
+    }
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOrigins("http://localhost:3000") 
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                .allowedHeaders("*")
+                .allowCredentials(true); 
     }
 
     @Bean

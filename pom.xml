@@ -13,7 +13,7 @@
 	<artifactId>faq-backend-api</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>faq-backend-api</name>
-	<description>Backend API for WILD</description>
+	<description>FAQ Backend API</description>
 	<url />
 	<licenses>
 		<license />
@@ -55,21 +55,20 @@
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt-api</artifactId>
-			<version>0.12.6</version> <!-- Verwende die neueste Version -->
+			<version>0.12.6</version> 
 		</dependency>
 
-		<!-- JJWT Impl (Implementierung für die API) -->
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt-impl</artifactId>
-			<version>0.12.6</version> <!-- Verwende die neueste Version -->
+			<version>0.12.6</version>
 		</dependency>
 
-		<!-- JJWT Jackson (Falls du Jackson für JSON-Verarbeitung benötigst) -->
+		
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt-jackson</artifactId>
-			<version>0.12.6</version> <!-- Verwende die neueste Version -->
+			<version>0.12.6</version>
 		</dependency>
 
 		<dependency>
@@ -78,7 +77,6 @@
 		</dependency>
 
 
-		<!-- Spring Boot Starter Data JPA (falls noch nicht enthalten) -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -89,7 +87,6 @@
 			<artifactId>postgresql</artifactId>
 		</dependency>
 
-		<!-- Spring Boot Starter Validation (für Validierung von Benutzerdaten) -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-validation</artifactId>
