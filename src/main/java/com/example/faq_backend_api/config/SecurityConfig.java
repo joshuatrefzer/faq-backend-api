@@ -29,7 +29,7 @@ public class SecurityConfig implements WebMvcConfigurer {
         registry.addMapping("/**")
                 .allowedOrigins("http://localhost:3000") 
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                .allowedHeaders("Content-Type", "Authorization", "*") 
+                .allowedHeaders("Content-Type", "Authorization", "Cookie") 
                 .allowCredentials(true); 
     }
 
