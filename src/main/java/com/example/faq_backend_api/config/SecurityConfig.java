@@ -15,7 +15,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import com.example.faq_backend_api.api.security.JwtAuthenticationFilter;
 import com.example.faq_backend_api.service.JwtService;
 
-
 @Configuration
 public class SecurityConfig implements WebMvcConfigurer {
 
@@ -30,7 +29,7 @@ public class SecurityConfig implements WebMvcConfigurer {
         registry.addMapping("/**")
                 .allowedOrigins("http://localhost:3000") 
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                .allowedHeaders("*")
+                .allowedHeaders("Content-Type", "Authorization", "*") 
                 .allowCredentials(true); 
     }
 
@@ -39,15 +38,15 @@ public class SecurityConfig implements WebMvcConfigurer {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.POST, "/faq").authenticated() 
+                        .requestMatchers(HttpMethod.POST, "/faq").authenticated()
                         .requestMatchers(HttpMethod.PUT, "/faq/**").authenticated()
                         .requestMatchers(HttpMethod.DELETE, "/question").authenticated()
                         .requestMatchers(HttpMethod.GET, "/question").authenticated()
                         .requestMatchers(HttpMethod.POST, "/question").permitAll()
                         .requestMatchers("/auth/signup", "/auth/login").permitAll()
                         .requestMatchers(HttpMethod.GET, "/faq", "/faq/**").permitAll()
-                        .anyRequest().authenticated()) 
-                .addFilterBefore(new JwtAuthenticationFilter(jwtService), UsernamePasswordAuthenticationFilter.class);                                                                                                            
+                        .anyRequest().authenticated())
+                .addFilterBefore(new JwtAuthenticationFilter(jwtService), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
