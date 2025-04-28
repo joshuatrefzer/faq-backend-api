@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -59,23 +58,13 @@ public class FAQService {
     }
 
     public List<FAQ> searchFAQs(String query) {
-        return faqRepository.findAll().stream()
-                .filter(faq -> 
-                    faq.getQuestion().toLowerCase().contains(query.toLowerCase()) ||
-                    faq.getAnswer().toLowerCase().contains(query.toLowerCase()) ||
-                    faq.getTags().stream().anyMatch(tag -> tag.getName().toLowerCase().contains(query.toLowerCase())) ||
-    
-                    isSimilar(faq.getQuestion(), query) ||
-                    isSimilar(faq.getAnswer(), query) ||
-                    faq.getTags().stream().anyMatch(tag -> isSimilar(tag.getName(), query))
-                )
-                .collect(Collectors.toList());
+        if (query == null || query.trim().isEmpty()) {
+            return getAllFAQs(); 
+        }
+        return faqRepository.fullTextSearchIncludingTags(query.trim());
     }
     
-    public boolean isSimilar(String text, String query) {
-        int distance = LevenshteinDistance.computeLevenshteinDistance(text.toLowerCase(), query.toLowerCase());
-        return distance <= 3;  
-    }
+   
 
     public Optional<FAQ> updateFAQ(Long id, FAQ updatedFAQ) {
         return faqRepository.findById(id).map(existingFAQ -> {
