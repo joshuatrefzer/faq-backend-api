@@ -1,9 +1,11 @@
 package com.example.faq_backend_api.service;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -58,14 +60,32 @@ public class FAQService {
     }
 
     public List<FAQ> searchFAQs(String query) {
-        if (query == null || query.trim().isEmpty()) {
-            return getAllFAQs(); 
-        }
-        return faqRepository.fullTextSearchIncludingTags(query.trim());
+        List<String> words = Arrays.stream(query.toLowerCase().split("\\s+"))
+                                   .filter(word -> word.length() > 1)
+                                   .collect(Collectors.toList());
+
+        return faqRepository.findAll().stream()
+            .filter(faq -> words.stream().anyMatch(word -> matchesFAQ(faq, word)))
+            .collect(Collectors.toList());
+    }
+
+    private boolean matchesFAQ(FAQ faq, String word) {
+        return containsOrSimilar(faq.getQuestion(), word) ||
+               containsOrSimilar(faq.getAnswer(), word) ||
+               faq.getTags().stream().anyMatch(tag -> containsOrSimilar(tag.getName(), word));
+    }
+
+    private boolean containsOrSimilar(String text, String word) {
+        text = text.toLowerCase();
+        return text.contains(word) || isSimilar(text, word);
+    }
+
+    private boolean isSimilar(String text, String word) {
+        int distance = LevenshteinDistance.computeLevenshteinDistance(text, word);
+        return distance <= Math.max(1, word.length() / 3);  
     }
     
    
-
     public Optional<FAQ> updateFAQ(Long id, FAQ updatedFAQ) {
         return faqRepository.findById(id).map(existingFAQ -> {
             existingFAQ.setQuestion(updatedFAQ.getQuestion());
