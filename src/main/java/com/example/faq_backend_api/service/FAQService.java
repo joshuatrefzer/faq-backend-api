@@ -60,10 +60,21 @@ public class FAQService {
 
     public List<FAQ> searchFAQs(String query) {
         return faqRepository.findAll().stream()
-                .filter(faq -> faq.getQuestion().toLowerCase().contains(query.toLowerCase()) ||
-                        faq.getAnswer().toLowerCase().contains(query.toLowerCase()) ||
-                        faq.getTags().stream().anyMatch(tag -> tag.getName().toLowerCase().contains(query.toLowerCase())))
+                .filter(faq -> 
+                    faq.getQuestion().toLowerCase().contains(query.toLowerCase()) ||
+                    faq.getAnswer().toLowerCase().contains(query.toLowerCase()) ||
+                    faq.getTags().stream().anyMatch(tag -> tag.getName().toLowerCase().contains(query.toLowerCase())) ||
+    
+                    isSimilar(faq.getQuestion(), query) ||
+                    isSimilar(faq.getAnswer(), query) ||
+                    faq.getTags().stream().anyMatch(tag -> isSimilar(tag.getName(), query))
+                )
                 .collect(Collectors.toList());
+    }
+    
+    public boolean isSimilar(String text, String query) {
+        int distance = LevenshteinDistance.computeLevenshteinDistance(text.toLowerCase(), query.toLowerCase());
+        return distance <= 3;  
     }
 
     public Optional<FAQ> updateFAQ(Long id, FAQ updatedFAQ) {

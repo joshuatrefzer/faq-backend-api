@@ -29,19 +29,10 @@ public class SecurityConfig implements WebMvcConfigurer {
         this.jwtService = jwtService;
     }
 
-    // @Override
-    // public void addCorsMappings(CorsRegistry registry) {
-    // registry.addMapping("/**")
-    // .allowedOrigins("http://localhost:3000")
-    // .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-    // .allowedHeaders("Authorization", "Content-Type", "X-Requested-With")
-    // .allowCredentials(true);
-    // }
-
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:3000"));
+        configuration.setAllowedOrigins(List.of("http://localhost:3000" , "http://joshuatrefzer-backend.com:3000"));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "X-Requested-With"));
         configuration.setAllowCredentials(true); 

@@ -24,7 +24,7 @@ public class TagController {
     @PostMapping
     public Tag createTag(@RequestParam String name) {
         return tagService.createTag(name);
-    }
+    } 
 
     @GetMapping
     public List<Tag> getAllTags() {
