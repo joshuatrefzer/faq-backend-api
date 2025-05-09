@@ -16,7 +16,7 @@ public class FAQ {
     @Column(length = 500)
     private String question;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(length = 1000)
     private String answer;
 
     @Column(length = 1000)

@@ -89,6 +89,7 @@ public class FAQService {
     public Optional<FAQ> updateFAQ(Long id, FAQ updatedFAQ) {
         return faqRepository.findById(id).map(existingFAQ -> {
             existingFAQ.setQuestion(updatedFAQ.getQuestion());
+            existingFAQ.setLink(updatedFAQ.getLink());
             existingFAQ.setAnswer(updatedFAQ.getAnswer());
             existingFAQ.setTags(updatedFAQ.getTags());
             return faqRepository.save(existingFAQ);
