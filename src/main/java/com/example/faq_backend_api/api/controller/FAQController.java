@@ -4,10 +4,12 @@ import java.util.List;
 import java.util.Set;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.faq_backend_api.api.model.DeleteResponse;
 import com.example.faq_backend_api.api.model.FAQ;
 import com.example.faq_backend_api.service.FAQService;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -65,6 +67,16 @@ public class FAQController {
         return faqService.updateFAQ(id, updatedFAQ)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<DeleteResponse> deleteFAQ(@PathVariable Long id) {
+        boolean deleted = faqService.deleteFAQ(id);
+        if (deleted) {
+            return ResponseEntity.ok(new DeleteResponse(true, "FAQ deleted successfully"));
+        } else {
+            return ResponseEntity.status(404).body(new DeleteResponse(false, "FAQ not found"));
+        }
     }
 
 }

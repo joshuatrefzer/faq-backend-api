@@ -95,7 +95,12 @@ public class FAQService {
         });
     }
 
-    
-    
+    public boolean deleteFAQ(Long id) {
+        if (faqRepository.existsById(id)) {
+            faqRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
     
 }
